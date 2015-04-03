@@ -107,6 +107,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRed:239.f/255 green:239.f/255 blue:244.f/255 alpha:1];
     [self.view addSubview:self.resultTextView];
+    [[MGJRequestManager alloc] init];
     // Do any additional setup after loading the view.
 }
 

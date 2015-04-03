@@ -233,6 +233,11 @@ NSInteger const MGJResponseCancelError = -1;
     return instance;
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (instancetype)init
 {
     self = [super init];
