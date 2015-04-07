@@ -1,3 +1,4 @@
 language: objective-c 
+podfile: MGJRequestManagerDemo/podfile
 script:
  - xctool -project MGJRequestManagerDemo/MGJRequestManagerDemo.xcodeproj -scheme MGJRequestManagerDemo -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
