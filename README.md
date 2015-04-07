@@ -1,5 +1,5 @@
 # MGJRequestManager
-![version](https://img.shields.io/cocoapods/v/MGJRequestManager.svg) ![license](https://img.shields.io/cocoapods/l/MGJRequestManager.svg) ![platform](https://img.shields.io/cocoapods/p/MGJRequestManager.svg)  
+![version](https://img.shields.io/cocoapods/v/MGJRequestManager.svg) ![license](https://img.shields.io/cocoapods/l/MGJRequestManager.svg) ![platform](https://img.shields.io/cocoapods/p/MGJRequestManager.svg) ![travis-ci](https://travis-ci.org/mogujie/MGJRequestManager.svg?branch=master)
 
 ## MGJRequestManager 是什么
 MGJRequestManager 是一款基于 AFNetwokring 2.0+ 的 iOS 网络库。
