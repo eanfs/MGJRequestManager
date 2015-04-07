@@ -26,10 +26,27 @@
     [super tearDown];
 }
 
-- (void)testDirectRequest {
-    XCTestExpectation *expection = [self expectationWithDescription:@"Test Direct Request"];
+- (void)testGETRequest {
+    XCTestExpectation *expection = [self expectationWithDescription:@"Test GET Request"];
     
     [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:@{@"foo": @"bar"} startImmediately:YES configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
+        XCTAssert([result[@"args"][@"foo"] isEqualToString:@"bar"]);
+        XCTAssert(error == nil);
+        [expection fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:5.f handler:^(NSError *error) {
+        if (error) {
+            NSLog(@"Timeout error:%@", error);
+        }
+    }];
+}
+
+- (void)testPOSTRequest {
+    XCTestExpectation *expection = [self expectationWithDescription:@"Test POST Request"];
+    
+    [[MGJRequestManager sharedInstance] POST:@"http://httpbin.org/post" parameters:@{@"foo": @"bar"} startImmediately:YES configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
+        XCTAssert([result[@"form"][@"foo"] isEqualToString:@"bar"]);
         XCTAssert(error == nil);
         [expection fulfill];
     }];
