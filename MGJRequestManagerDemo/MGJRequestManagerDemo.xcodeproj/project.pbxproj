@@ -44,6 +44,7 @@
 		6A46D3C21AB9740A0091BA6D /* MGJRequestManagerDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGJRequestManagerDemoTests.m; sourceTree = "<group>"; };
 		6A46D3CD1AB9AAED0091BA6D /* MGJRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGJRequestManager.h; sourceTree = "<group>"; };
 		6A46D3CE1AB9AAED0091BA6D /* MGJRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGJRequestManager.m; sourceTree = "<group>"; };
+		6A8674121AD3BE1A00BAE00D /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		6AEB9BA71ABBC66B002BE3EE /* DemoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoListViewController.h; sourceTree = "<group>"; };
 		6AEB9BA81ABBC66B002BE3EE /* DemoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoListViewController.m; sourceTree = "<group>"; };
 		6AEB9BAA1ABBCED0002BE3EE /* DemoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoDetailViewController.h; sourceTree = "<group>"; };
@@ -74,6 +75,7 @@
 		5AD5937E5D9AAF97DA699D96 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6A8674121AD3BE1A00BAE00D /* libPods.a */,
 				F2B92DD0D58D765CC35642E4 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -337,6 +339,7 @@
 /* Begin XCBuildConfiguration section */
 		6A46D3C41AB9740A0091BA6D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B03179B69D1D0DA6A3822367 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -435,6 +438,7 @@
 		};
 		6A46D3CA1AB9740A0091BA6D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B03179B69D1D0DA6A3822367 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -447,6 +451,10 @@
 				);
 				INFOPLIST_FILE = MGJRequestManagerDemoTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MGJRequestManagerDemo.app/MGJRequestManagerDemo";
 			};
@@ -462,6 +470,10 @@
 				);
 				INFOPLIST_FILE = MGJRequestManagerDemoTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MGJRequestManagerDemo.app/MGJRequestManagerDemo";
 			};
