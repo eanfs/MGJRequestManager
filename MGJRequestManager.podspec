@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "MGJRequestManager"
-  s.version      = "0.8.0"
+  s.version      = "0.8.1"
   s.summary      = "A Network Library based on AFNetworking 2.*"
 
   s.homepage     = "http://github.com/mogujie/MGJRequestManager"
@@ -66,7 +66,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/mogujie/MGJRequestManager.git", :tag => "0.8.0" }
+  s.source       = { :git => "https://github.com/mogujie/MGJRequestManager.git", :tag => "0.8.1" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
