@@ -193,6 +193,7 @@ NSInteger const MGJResponseCancelError = -1;
     configuration.resultCacheDuration = self.resultCacheDuration;
     configuration.builtinParameters = [self.builtinParameters copy];
     configuration.userInfo = [self.userInfo copy];
+    configuration.buildinHeaders = [self.builtinParameters copy];
     return configuration;
 }
 
@@ -344,6 +345,12 @@ NSInteger const MGJResponseCancelError = -1;
         request = [self.requestManager.requestSerializer requestWithMethod:method URLString:[[NSURL URLWithString:combinedURL relativeToURL:[NSURL URLWithString:configuration.baseURL]] absoluteString] parameters:parameters error:nil];
     }
     
+    if ([configuration.buildinHeaders count] > 0) {
+        for (NSString *key in configuration.buildinHeaders) {
+            [request setValue:configuration.buildinHeaders[key] forHTTPHeaderField:key];
+        }
+    }
+    
     // 根据 configuration 和 request 生成一个 operation
     AFHTTPRequestOperation *operation = [self createOperationWithConfiguration:configuration request:request];
     
@@ -370,14 +377,6 @@ NSInteger const MGJResponseCancelError = -1;
         return operation;
     }
     
-    // 如果设置为使用缓存，那么先去缓存里看一下
-    if (configuration.resultCacheDuration > 0 && [method isEqualToString:@"GET"]) {
-        NSString *urlKey = [URLString stringByAppendingString:[self serializeParams:parameters]];
-        id result = [self.cache objectForKey:urlKey];
-        if (result) {
-            completionHandler(nil, result, YES, nil);
-        }
-    }
     
     __weak typeof(self) weakSelf = self;
     
@@ -419,7 +418,7 @@ NSInteger const MGJResponseCancelError = -1;
     };
     
     // 对 response 做一层处理
-    MGJResponse *(^handleResponse)(AFHTTPRequestOperation *, id) = ^ MGJResponse *(AFHTTPRequestOperation *theOperation, id responseObject) {
+    MGJResponse *(^handleResponse)(AFHTTPRequestOperation *, id,BOOL) = ^ MGJResponse *(AFHTTPRequestOperation *theOperation, id responseObject,BOOL isFromCache) {
         MGJResponse *response = [[MGJResponse alloc] init];
         // a bit trick :)
         response.error = [responseObject isKindOfClass:[NSError class]] ? responseObject : nil;
@@ -443,16 +442,32 @@ NSInteger const MGJResponseCancelError = -1;
             return response;
         }
         
-        completionHandler(response.error, response.result, NO, theOperation);
+        completionHandler(response.error, response.result, isFromCache, theOperation);
         [weakSelf.completionBlocks removeObjectForKey:theOperation];
         
         checkIfShouldDoChainOperation(theOperation);
         return response;
     };
     
+    // 如果设置为使用缓存，那么先去缓存里看一下
+    if (configuration.resultCacheDuration > 0 && [method isEqualToString:@"GET"]) {
+        NSString *urlKey = [URLString stringByAppendingString:[self serializeParams:parameters]];
+        id result = [self.cache objectForKey:urlKey];
+        if (result) {
+            
+            if (!shouldStopProcessingRequest(operation, configuration.userInfo, configuration)) {
+                handleResponse(operation,result,YES);
+            } else {
+                NSError *error = [NSError errorWithDomain:@"取消请求" code:MGJResponseCancelError userInfo:nil];
+                handleResponse(operation, error,NO);
+            }
+            return operation;
+        }
+    }
+    
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *theOperation, id responseObject){
-        MGJResponse *response = handleResponse(theOperation, responseObject);
+        MGJResponse *response = handleResponse(theOperation, responseObject,NO);
         
         // 如果使用缓存，就把结果放到缓存中方便下次使用
         if (configuration.resultCacheDuration > 0 && [method isEqualToString:@"GET"] && !response.error) {
@@ -461,14 +476,14 @@ NSInteger const MGJResponseCancelError = -1;
             [weakSelf.cache setObject:response.result forKey:urlKey];
         }
     } failure:^(AFHTTPRequestOperation *theOperation, NSError *error){
-        handleResponse(theOperation, error);
+        handleResponse(theOperation, error,NO);
     }];
     
     if (!shouldStopProcessingRequest(operation, configuration.userInfo, configuration)) {
         [self.requestManager.operationQueue addOperation:operation];
     } else {
         NSError *error = [NSError errorWithDomain:@"取消请求" code:MGJResponseCancelError userInfo:nil];
-        handleResponse(operation, error);
+        handleResponse(operation, error,NO);
     }
     
     [self.completionBlocks setObject:operation.completionBlock forKey:operation];
