@@ -62,6 +62,9 @@ extern NSInteger const MGJResponseCancelError;
  *  每次请求都要带上的一些参数
  */
 @property (nonatomic) NSDictionary *builtinParameters;
+
+@property (nonatomic,strong) NSDictionary *buildinHeaders;
+
 @end
 
 

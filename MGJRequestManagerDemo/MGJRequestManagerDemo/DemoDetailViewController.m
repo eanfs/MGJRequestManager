@@ -101,6 +101,11 @@
         detailViewController.selectedSelector = @selector(calculateRequestTime);
         return detailViewController;
     }];
+    
+    [DemoListViewController registerWithTitle:@"添加头信息" handler:^UIViewController *{
+        detailViewController.selectedSelector = @selector(addHeaderValues);
+        return detailViewController;
+    }];
 }
 
 - (void)viewDidLoad {
@@ -526,6 +531,21 @@
             [self appendLog:error.description];
         }
     }];
+}
+
+- (void)addHeaderValues
+{
+    MGJRequestManagerConfiguration *configuration = [MGJRequestManager sharedInstance].configuration;
+    configuration.builtinParameters = @{@"operationSys":@"ios",@"requestTool":@"MGJ"};
+    
+    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:nil startImmediately:YES configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
+        if (!error) {
+            [self appendLog:[result description]];
+        } else {
+            [self appendLog:error.description];
+        }
+    }];
+
 }
 
 @end
