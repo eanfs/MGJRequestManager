@@ -193,7 +193,7 @@ NSInteger const MGJResponseCancelError = -1;
     configuration.resultCacheDuration = self.resultCacheDuration;
     configuration.builtinParameters = [self.builtinParameters copy];
     configuration.userInfo = [self.userInfo copy];
-    configuration.buildinHeaders = [self.builtinParameters copy];
+    configuration.builtinHeaders = [self.builtinParameters copy];
     return configuration;
 }
 
@@ -345,9 +345,9 @@ NSInteger const MGJResponseCancelError = -1;
         request = [self.requestManager.requestSerializer requestWithMethod:method URLString:[[NSURL URLWithString:combinedURL relativeToURL:[NSURL URLWithString:configuration.baseURL]] absoluteString] parameters:parameters error:nil];
     }
     
-    if ([configuration.buildinHeaders count] > 0) {
-        for (NSString *key in configuration.buildinHeaders) {
-            [request setValue:configuration.buildinHeaders[key] forHTTPHeaderField:key];
+    if (configuration.builtinHeaders.count > 0) {
+        for (NSString *key in configuration.builtinHeaders) {
+            [request setValue:configuration.builtinHeaders[key] forHTTPHeaderField:key];
         }
     }
     
@@ -456,10 +456,10 @@ NSInteger const MGJResponseCancelError = -1;
         if (result) {
             
             if (!shouldStopProcessingRequest(operation, configuration.userInfo, configuration)) {
-                handleResponse(operation,result,YES);
+                handleResponse(operation, result, YES);
             } else {
                 NSError *error = [NSError errorWithDomain:@"取消请求" code:MGJResponseCancelError userInfo:nil];
-                handleResponse(operation, error,NO);
+                handleResponse(operation, error, NO);
             }
             return operation;
         }

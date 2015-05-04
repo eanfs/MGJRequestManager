@@ -63,7 +63,7 @@ extern NSInteger const MGJResponseCancelError;
  */
 @property (nonatomic) NSDictionary *builtinParameters;
 
-@property (nonatomic,strong) NSDictionary *buildinHeaders;
+@property (nonatomic,strong) NSDictionary *builtinHeaders;
 
 @end
 
