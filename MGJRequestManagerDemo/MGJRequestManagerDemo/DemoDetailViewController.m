@@ -272,7 +272,7 @@
 - (void)makeBuiltinParametersRequest
 {
     MGJRequestManagerConfiguration *configuration = [[MGJRequestManagerConfiguration alloc] init];
-    configuration.builtinParameters = @{@"t": @([[NSDate date] timeIntervalSince1970]), @"network": @"1", @"device": @"iphone3,2"};
+    configuration.builtinParameters = @{@"t": [NSString stringWithFormat:@"%lf", [[NSDate date] timeIntervalSince1970]], @"network": @"1", @"device": @"iphone3,2"};
     [MGJRequestManager sharedInstance].configuration = configuration;
     
     [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get"
@@ -290,7 +290,7 @@
 - (void)calculateTokenEveryRequest
 {
     MGJRequestManagerConfiguration *configuration = [[MGJRequestManagerConfiguration alloc] init];
-    configuration.builtinParameters = @{@"t": @([[NSDate date] timeIntervalSince1970]), @"network": @"1", @"device": @"iphone3,2"};
+    configuration.builtinParameters = @{@"t": [NSString stringWithFormat:@"%lf", [[NSDate date] timeIntervalSince1970]], @"network": @"1", @"device": @"iphone3,2"};
     [MGJRequestManager sharedInstance].configuration = configuration;
     
     [MGJRequestManager sharedInstance].parametersHandler = ^(NSMutableDictionary *builtinParameters, NSMutableDictionary *requestParameters) {
