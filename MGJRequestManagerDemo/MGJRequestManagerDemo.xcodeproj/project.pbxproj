@@ -13,7 +13,7 @@
 		6A46D3B41AB9740A0091BA6D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A46D3B31AB9740A0091BA6D /* Images.xcassets */; };
 		6A46D3B71AB9740A0091BA6D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A46D3B51AB9740A0091BA6D /* LaunchScreen.xib */; };
 		6A46D3C31AB9740A0091BA6D /* MGJRequestManagerDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A46D3C21AB9740A0091BA6D /* MGJRequestManagerDemoTests.m */; };
-		6A46D3CF1AB9AAED0091BA6D /* MGJRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A46D3CE1AB9AAED0091BA6D /* MGJRequestManager.m */; };
+		6A46D3CF1AB9AAED0091BA6D /* STRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A46D3CE1AB9AAED0091BA6D /* STRequestManager.m */; };
 		6AEB9BA91ABBC66B002BE3EE /* DemoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AEB9BA81ABBC66B002BE3EE /* DemoListViewController.m */; };
 		6AEB9BAC1ABBCED0002BE3EE /* DemoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AEB9BAB1ABBCED0002BE3EE /* DemoDetailViewController.m */; };
 		8C30FBBDA95E408053DD8A7C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F2B92DD0D58D765CC35642E4 /* libPods.a */; };
@@ -43,8 +43,8 @@
 		6A46D3BC1AB9740A0091BA6D /* MGJRequestManagerDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MGJRequestManagerDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A46D3C11AB9740A0091BA6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A46D3C21AB9740A0091BA6D /* MGJRequestManagerDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGJRequestManagerDemoTests.m; sourceTree = "<group>"; };
-		6A46D3CD1AB9AAED0091BA6D /* MGJRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGJRequestManager.h; sourceTree = "<group>"; };
-		6A46D3CE1AB9AAED0091BA6D /* MGJRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGJRequestManager.m; sourceTree = "<group>"; };
+		6A46D3CD1AB9AAED0091BA6D /* STRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRequestManager.h; sourceTree = "<group>"; };
+		6A46D3CE1AB9AAED0091BA6D /* STRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRequestManager.m; sourceTree = "<group>"; };
 		6A8674121AD3BE1A00BAE00D /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		6AEB9BA71ABBC66B002BE3EE /* DemoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoListViewController.h; sourceTree = "<group>"; };
 		6AEB9BA81ABBC66B002BE3EE /* DemoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoListViewController.m; sourceTree = "<group>"; };
@@ -150,8 +150,8 @@
 		6A46D3CC1AB9AAED0091BA6D /* MGJRequestManager */ = {
 			isa = PBXGroup;
 			children = (
-				6A46D3CD1AB9AAED0091BA6D /* MGJRequestManager.h */,
-				6A46D3CE1AB9AAED0091BA6D /* MGJRequestManager.m */,
+				6A46D3CD1AB9AAED0091BA6D /* STRequestManager.h */,
+				6A46D3CE1AB9AAED0091BA6D /* STRequestManager.m */,
 			);
 			name = MGJRequestManager;
 			path = ../MGJRequestManager;
@@ -367,7 +367,7 @@
 			files = (
 				6A46D3A91AB9740A0091BA6D /* AppDelegate.m in Sources */,
 				6A46D3A61AB9740A0091BA6D /* main.m in Sources */,
-				6A46D3CF1AB9AAED0091BA6D /* MGJRequestManager.m in Sources */,
+				6A46D3CF1AB9AAED0091BA6D /* STRequestManager.m in Sources */,
 				6AEB9BAC1ABBCED0002BE3EE /* DemoDetailViewController.m in Sources */,
 				6AEB9BA91ABBC66B002BE3EE /* DemoListViewController.m in Sources */,
 			);
