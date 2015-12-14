@@ -1,6 +1,6 @@
 //
-//  MGJRequestManagerDemoTests.m
-//  MGJRequestManagerDemoTests
+//  STRequestManagerDemoTests.m
+//  STRequestManagerDemoTests
 //
 //  Created by limboy on 3/18/15.
 //  Copyright (c) 2015 juangua. All rights reserved.
@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "MGJRequestManager.h"
+#import "STRequestManager.h"
 
-@interface MGJRequestManagerDemoTests : XCTestCase
+@interface STRequestManagerDemoTests : XCTestCase
 
 @end
 
-@implementation MGJRequestManagerDemoTests
+@implementation STRequestManagerDemoTests
 
 - (void)setUp {
     [super setUp];
@@ -29,7 +29,7 @@
 - (void)testGETRequest {
     XCTestExpectation *expection = [self expectationWithDescription:@"Test GET Request"];
     
-    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:@{@"foo": @"bar"} startImmediately:YES configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
+    [[STRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:@{@"foo": @"bar"} startImmediately:YES configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
         XCTAssert([result[@"args"][@"foo"] isEqualToString:@"bar"]);
         XCTAssert(error == nil);
         [expection fulfill];
@@ -45,7 +45,7 @@
 - (void)testPOSTRequest {
     XCTestExpectation *expection = [self expectationWithDescription:@"Test POST Request"];
     
-    [[MGJRequestManager sharedInstance] POST:@"http://httpbin.org/post" parameters:@{@"foo": @"bar"} startImmediately:YES configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
+    [[STRequestManager sharedInstance] POST:@"http://httpbin.org/post" parameters:@{@"foo": @"bar"} startImmediately:YES configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
         XCTAssert([result[@"form"][@"foo"] isEqualToString:@"bar"]);
         XCTAssert(error == nil);
         [expection fulfill];
@@ -63,20 +63,20 @@
     
     static BOOL FirstRequestFinished = NO;
     
-    AFHTTPRequestOperation *operation1 = [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/delay/2" parameters:nil startImmediately:NO configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
+    AFHTTPRequestOperation *operation1 = [[STRequestManager sharedInstance] GET:@"http://httpbin.org/delay/2" parameters:nil startImmediately:NO configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
         XCTAssert(error == nil);
         FirstRequestFinished = YES;
     }];
     
-    AFHTTPRequestOperation *operation2 = [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:@{@"foo": @"bar"} startImmediately:NO configurationHandler:nil completionHandler:^(NSError *error, NSDictionary *result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
+    AFHTTPRequestOperation *operation2 = [[STRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:@{@"foo": @"bar"} startImmediately:NO configurationHandler:nil completionHandler:^(NSError *error, NSDictionary *result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
         XCTAssert([result[@"args"][@"foo"] isEqualToString:@"bar"]);
         XCTAssert(FirstRequestFinished);
         XCTAssert(error == nil);
         [expection fulfill];
     }];
     
-    [[MGJRequestManager sharedInstance] addOperation:operation1 toChain:@"chain"];
-    [[MGJRequestManager sharedInstance] addOperation:operation2 toChain:@"chain"];
+    [[STRequestManager sharedInstance] addOperation:operation1 toChain:@"chain"];
+    [[STRequestManager sharedInstance] addOperation:operation2 toChain:@"chain"];
     
     [self waitForExpectationsWithTimeout:5.f handler:^(NSError *error) {
         if (error) {

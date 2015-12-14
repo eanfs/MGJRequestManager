@@ -1,6 +1,6 @@
 //
 //  DemoDetailViewController.m
-//  MGJRequestManagerDemo
+//  STRequestManagerDemo
 //
 //  Created by limboy on 3/20/15.
 //  Copyright (c) 2015 juangua. All rights reserved.
@@ -8,7 +8,7 @@
 
 #import "DemoDetailViewController.h"
 #import "DemoListViewController.h"
-#import "MGJRequestManager.h"
+#import "STRequestManager.h"
 #import <CommonCrypto/CommonDigest.h>
 #import <UIImageView+AFNetworking.h>
 
@@ -141,7 +141,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [MGJRequestManager sharedInstance].configuration = nil;
+    [STRequestManager sharedInstance].configuration = nil;
     [self appendLog:@"正在发送请求..."];
     [self.resultTextView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
     [self performSelector:self.selectedSelector withObject:nil afterDelay:0];
@@ -197,7 +197,7 @@
 
 - (void)makeGETRequest
 {
-    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:@{@"foo": @"bar"} startImmediately:YES
+    [[STRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:@{@"foo": @"bar"} startImmediately:YES
  configurationHandler:nil completionHandler:^(NSError *error, id<NSObject> result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
      [self appendLog:result.description];
  }];
@@ -205,7 +205,7 @@
 
 - (void)makePOSTRequest
 {
-    [[MGJRequestManager sharedInstance] POST:@"http://httpbin.org/post" parameters:@{@"foo": @"bar"} startImmediately:YES
+    [[STRequestManager sharedInstance] POST:@"http://httpbin.org/post" parameters:@{@"foo": @"bar"} startImmediately:YES
  configurationHandler:nil completionHandler:^(NSError *error, id<NSObject> result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
      [self appendLog:result.description];
  }];
@@ -213,7 +213,7 @@
 
 - (void)batchRequests
 {
-    AFHTTPRequestOperation *operation1 = [[MGJRequestManager sharedInstance]
+    AFHTTPRequestOperation *operation1 = [[STRequestManager sharedInstance]
                                           GET:@"http://httpbin.org/get"
                                           parameters:@{@"foo": @"bar"}
                                           startImmediately:NO
@@ -222,7 +222,7 @@
                                               [self appendLog:result.description];
                                           }];
     
-    AFHTTPRequestOperation *operation2 = [[MGJRequestManager sharedInstance]
+    AFHTTPRequestOperation *operation2 = [[STRequestManager sharedInstance]
                                           GET:@"http://httpbin.org/get"
                                           parameters:@{@"foo": @"bar"}
                                           startImmediately:NO
@@ -231,7 +231,7 @@
                                               [self appendLog:result.description];
                                           }];
     
-    [[MGJRequestManager sharedInstance] batchOfRequestOperations:@[operation1, operation2] progressBlock:^(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations) {
+    [[STRequestManager sharedInstance] batchOfRequestOperations:@[operation1, operation2] progressBlock:^(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations) {
         [self appendLog:[NSString stringWithFormat:@"发送完成的请求：%ld/%ld", numberOfFinishedOperations, totalNumberOfOperations]];
     } completionBlock:^() {
         [self appendLog:@"请求发送完成"];
@@ -240,11 +240,11 @@
 
 - (void)makeCacheGETRequest
 {
-    AFHTTPRequestOperation *operation1 = [[MGJRequestManager sharedInstance]
+    AFHTTPRequestOperation *operation1 = [[STRequestManager sharedInstance]
                                           GET:@"http://httpbin.org/get"
                                           parameters:@{@"foo": @"bar"}
                                           startImmediately:NO
-                                          configurationHandler:^(MGJRequestManagerConfiguration *configuration) {
+                                          configurationHandler:^(STRequestManagerConfiguration *configuration) {
                                               configuration.resultCacheDuration = 30;
                                           }
                                           completionHandler:^(NSError *error, id<NSObject> result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
@@ -252,11 +252,11 @@
                                               [self appendLog:result.description];
                                           }];
     
-    AFHTTPRequestOperation *operation2 = [[MGJRequestManager sharedInstance]
+    AFHTTPRequestOperation *operation2 = [[STRequestManager sharedInstance]
                                           GET:@"http://httpbin.org/get"
                                           parameters:@{@"foo": @"bar"}
                                           startImmediately:NO
-                                          configurationHandler:^(MGJRequestManagerConfiguration *configuration) {
+                                          configurationHandler:^(STRequestManagerConfiguration *configuration) {
                                               configuration.resultCacheDuration = 30;
                                           }
                                           completionHandler:^(NSError *error, id<NSObject> result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
@@ -265,17 +265,17 @@
                                           }];
     
     
-    [[MGJRequestManager sharedInstance] addOperation:operation1 toChain:@"cache"];
-    [[MGJRequestManager sharedInstance] addOperation:operation2 toChain:@"cache"];
+    [[STRequestManager sharedInstance] addOperation:operation1 toChain:@"cache"];
+    [[STRequestManager sharedInstance] addOperation:operation2 toChain:@"cache"];
 }
 
 - (void)makeBuiltinParametersRequest
 {
-    MGJRequestManagerConfiguration *configuration = [[MGJRequestManagerConfiguration alloc] init];
+    STRequestManagerConfiguration *configuration = [[STRequestManagerConfiguration alloc] init];
     configuration.builtinParameters = @{@"t": [NSString stringWithFormat:@"%lf", [[NSDate date] timeIntervalSince1970]], @"network": @"1", @"device": @"iphone3,2"};
-    [MGJRequestManager sharedInstance].configuration = configuration;
+    [STRequestManager sharedInstance].configuration = configuration;
     
-    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get"
+    [[STRequestManager sharedInstance] GET:@"http://httpbin.org/get"
                                  parameters:nil startImmediately:YES
                        configurationHandler:nil
                           completionHandler:^(NSError *error, id<NSObject> result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
@@ -289,11 +289,11 @@
 
 - (void)calculateTokenEveryRequest
 {
-    MGJRequestManagerConfiguration *configuration = [[MGJRequestManagerConfiguration alloc] init];
+    STRequestManagerConfiguration *configuration = [[STRequestManagerConfiguration alloc] init];
     configuration.builtinParameters = @{@"t": [NSString stringWithFormat:@"%lf", [[NSDate date] timeIntervalSince1970]], @"network": @"1", @"device": @"iphone3,2"};
-    [MGJRequestManager sharedInstance].configuration = configuration;
+    [STRequestManager sharedInstance].configuration = configuration;
     
-    [MGJRequestManager sharedInstance].parametersHandler = ^(NSMutableDictionary *builtinParameters, NSMutableDictionary *requestParameters) {
+    [STRequestManager sharedInstance].parametersHandler = ^(NSMutableDictionary *builtinParameters, NSMutableDictionary *requestParameters) {
         NSString *builtinValues = [builtinParameters.allValues componentsJoinedByString:@""];
         NSString *requestValues = [requestParameters.allValues componentsJoinedByString:@""];
         NSString *md5Values = [self md5String:[NSString stringWithFormat:@"%@%@", builtinValues, requestValues]];
@@ -301,7 +301,7 @@
     };
     
     NSDictionary *requestParameters = @{@"user_id": @1024};
-    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get"
+    [[STRequestManager sharedInstance] GET:@"http://httpbin.org/get"
                                  parameters:requestParameters
                            startImmediately:YES
                        configurationHandler:nil
@@ -312,15 +312,15 @@
 
 - (void)preventFromSendingRequest
 {
-    MGJRequestManagerConfiguration *configuration = [[MGJRequestManagerConfiguration alloc] init];
+    STRequestManagerConfiguration *configuration = [[STRequestManagerConfiguration alloc] init];
     configuration.requestHandler = ^(AFHTTPRequestOperation *operation, id userInfo, BOOL *shouldStopProcessing){
         // NSString *requestURL = operation.request.URL.absoluteString;
         // suppose requestURL contains some invalid characters
         *shouldStopProcessing = YES;
     };
     
-    [MGJRequestManager sharedInstance].configuration = configuration;
-    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get"
+    [STRequestManager sharedInstance].configuration = configuration;
+    [[STRequestManager sharedInstance] GET:@"http://httpbin.org/get"
                                  parameters:nil startImmediately:YES
                        configurationHandler:nil
                           completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
@@ -330,8 +330,8 @@
 
 - (void)handleResponse
 {
-    MGJRequestManagerConfiguration *configuration = [[MGJRequestManagerConfiguration alloc] init];
-    configuration.responseHandler = ^(AFHTTPRequestOperation *operation, id userInfo, MGJResponse *response, BOOL *shouldStopProcessing) {
+    STRequestManagerConfiguration *configuration = [[STRequestManagerConfiguration alloc] init];
+    configuration.responseHandler = ^(AFHTTPRequestOperation *operation, id userInfo, STResponse *response, BOOL *shouldStopProcessing) {
         // response.result 里包含了原始的 object
         // 如果服务端返回的 result 中包含了 error 信息，可以设置 response.error
         // 这样使用方就可以知道这个请求失败了
@@ -342,8 +342,8 @@
         }
     };
     
-    [MGJRequestManager sharedInstance].configuration = configuration;
-    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:@{@"status": @"error", @"message": @"模拟请求失败"} startImmediately:YES configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
+    [STRequestManager sharedInstance].configuration = configuration;
+    [[STRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:@{@"status": @"error", @"message": @"模拟请求失败"} startImmediately:YES configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
         if (error) {
             [self appendLog:error.description];
         }
@@ -352,10 +352,10 @@
 
 - (void)handleSpecialRequest
 {
-    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get"
+    [[STRequestManager sharedInstance] GET:@"http://httpbin.org/get"
                                  parameters:nil
                            startImmediately:YES
-                       configurationHandler:^(MGJRequestManagerConfiguration *configuration) {
+                       configurationHandler:^(STRequestManagerConfiguration *configuration) {
                            configuration.requestHandler = ^(AFHTTPRequestOperation *operation, id userInfo, BOOL *shouldStopProcessing) {
                                // 假设这是一个特殊请求
                                *shouldStopProcessing = YES;
@@ -363,7 +363,7 @@
                            [self appendLog:@"这个请求不会被发出去，被特殊处理了"];
                        }
                           completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
-                              if (error.code == MGJResponseCancelError) {
+                              if (error.code == STResponseCancelError) {
                                   [self appendLog:@"这个请求被取消了"];
                               }
                           }];
@@ -371,7 +371,7 @@
 
 - (void)chainRequests
 {
-    AFHTTPRequestOperation *operation1 = [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/delay/3"
+    AFHTTPRequestOperation *operation1 = [[STRequestManager sharedInstance] GET:@"http://httpbin.org/delay/3"
                                                                       parameters:@{@"method": @1}
                                                                 startImmediately:NO
                                                             configurationHandler:nil
@@ -379,20 +379,20 @@
                                                                    [self appendLog:result.description];
                                                                }];
     
-    AFHTTPRequestOperation *operation2 = [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get"
+    AFHTTPRequestOperation *operation2 = [[STRequestManager sharedInstance] GET:@"http://httpbin.org/get"
                                                                       parameters:@{@"method": @2}
                                                                 startImmediately:NO
                                                             configurationHandler:nil
                                                                completionHandler:^(NSError *error, id<NSObject> result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
                                                                    [self appendLog:result.description];
                                                                }];
-    [[MGJRequestManager sharedInstance] addOperation:operation1 toChain:@"chain"];
-    [[MGJRequestManager sharedInstance] addOperation:operation2 toChain:@"chain"];
+    [[STRequestManager sharedInstance] addOperation:operation1 toChain:@"chain"];
+    [[STRequestManager sharedInstance] addOperation:operation2 toChain:@"chain"];
 }
 
 - (void)runningRequests
 {
-    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/delay/3"
+    [[STRequestManager sharedInstance] GET:@"http://httpbin.org/delay/3"
                                  parameters:@{@"method": @1}
                            startImmediately:YES
                        configurationHandler:nil
@@ -400,7 +400,7 @@
                               [self appendLog:error.description];
                           }];
     
-    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get"
+    [[STRequestManager sharedInstance] GET:@"http://httpbin.org/get"
                                  parameters:@{@"method": @2}
                            startImmediately:YES
                        configurationHandler:nil
@@ -408,14 +408,14 @@
                               [self appendLog:error.description];
                           }];
     
-    [self appendLog:[[MGJRequestManager sharedInstance] runningRequests].description];
-    [[MGJRequestManager sharedInstance] cancelAllRequest];
+    [self appendLog:[[STRequestManager sharedInstance] runningRequests].description];
+    [[STRequestManager sharedInstance] cancelAllRequest];
 }
 
 - (void)cancelRequestByURL
 {
     NSString *urlString = @"http://httpbin.org/delay/5";
-    [[MGJRequestManager sharedInstance] GET:urlString
+    [[STRequestManager sharedInstance] GET:urlString
                                  parameters:@{@"method": @1}
                            startImmediately:YES
                        configurationHandler:nil
@@ -423,13 +423,13 @@
                               [self appendLog:error.description];
                           }];
     
-    [[MGJRequestManager sharedInstance] cancelHTTPOperationsWithMethod:@"GET" url:urlString];
+    [[STRequestManager sharedInstance] cancelHTTPOperationsWithMethod:@"GET" url:urlString];
 }
 
 - (void)simulateTokenExpired
 {
-    MGJRequestManagerConfiguration *configuration = [[MGJRequestManagerConfiguration alloc] init];
-    configuration.responseHandler = ^(AFHTTPRequestOperation *operation, id userInfo, MGJResponse *response, BOOL *shouldStopProcessing) {
+    STRequestManagerConfiguration *configuration = [[STRequestManagerConfiguration alloc] init];
+    configuration.responseHandler = ^(AFHTTPRequestOperation *operation, id userInfo, STResponse *response, BOOL *shouldStopProcessing) {
         static BOOL hasExecuted;
         if (!hasExecuted) {
             hasExecuted = YES;
@@ -437,7 +437,7 @@
             
             static BOOL hasGotRefreshToken = NO;
             
-            AFHTTPRequestOperation *refreshTokenRequestOperation = [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:nil startImmediately:NO configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
+            AFHTTPRequestOperation *refreshTokenRequestOperation = [[STRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:nil startImmediately:NO configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
                 if (!error) {
                     [self appendLog:@"got refresh token"];
                 } else {
@@ -446,23 +446,23 @@
                 hasGotRefreshToken = YES;
             }];
             
-            AFHTTPRequestOperation *reAssembledOperation = [[MGJRequestManager sharedInstance] reAssembleOperation:operation];
+            AFHTTPRequestOperation *reAssembledOperation = [[STRequestManager sharedInstance] reAssembleOperation:operation];
             
-            [[MGJRequestManager sharedInstance] addOperation:refreshTokenRequestOperation toChain:@"refreshToken"];
-            [[MGJRequestManager sharedInstance] addOperation:reAssembledOperation toChain:@"refreshToken"];
+            [[STRequestManager sharedInstance] addOperation:refreshTokenRequestOperation toChain:@"refreshToken"];
+            [[STRequestManager sharedInstance] addOperation:reAssembledOperation toChain:@"refreshToken"];
         }
     };
     
-    [MGJRequestManager sharedInstance].configuration = configuration;
+    [STRequestManager sharedInstance].configuration = configuration;
     
-    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/delay/2" parameters:nil startImmediately:YES configurationHandler:nil completionHandler:^(NSError *error, id<NSObject> result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
+    [[STRequestManager sharedInstance] GET:@"http://httpbin.org/delay/2" parameters:nil startImmediately:YES configurationHandler:nil completionHandler:^(NSError *error, id<NSObject> result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
         [self appendLog:result.description];
     }];
 }
 
 - (void)showLoadingWhenSendingRequest
 {
-    MGJRequestManagerConfiguration *configuration = [[MGJRequestManagerConfiguration alloc] init];
+    STRequestManagerConfiguration *configuration = [[STRequestManagerConfiguration alloc] init];
     UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     indicatorView.frame = CGRectMake(self.view.frame.size.width / 2 - 8, self.view.frame.size.height / 2 - 8, 16, 16);
     [self.view addSubview:indicatorView];
@@ -473,17 +473,17 @@
         }
     };
     
-    configuration.responseHandler = ^(AFHTTPRequestOperation *operation, id userInfo, MGJResponse *response, BOOL *shouldStopProcessing) {
+    configuration.responseHandler = ^(AFHTTPRequestOperation *operation, id userInfo, STResponse *response, BOOL *shouldStopProcessing) {
         if (userInfo[@"showLoading"]) {
             [indicatorView stopAnimating];
         }
     };
     
-    [MGJRequestManager sharedInstance].configuration = configuration;
-    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/delay/2"
+    [STRequestManager sharedInstance].configuration = configuration;
+    [[STRequestManager sharedInstance] GET:@"http://httpbin.org/delay/2"
                                  parameters:nil
                            startImmediately:YES
-                       configurationHandler:^(MGJRequestManagerConfiguration *configuration){
+                       configurationHandler:^(STRequestManagerConfiguration *configuration){
                            configuration.userInfo = @{@"showLoading": @YES};
                        } completionHandler:^(NSError *error, id<NSObject> result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
                            [self appendLog:result.description];
@@ -492,15 +492,15 @@
 
 - (void)calculateRequestTime
 {
-    MGJRequestManagerConfiguration *configuration = [[MGJRequestManagerConfiguration alloc] init];
+    STRequestManagerConfiguration *configuration = [[STRequestManagerConfiguration alloc] init];
     NSTimeInterval startTime = [[NSDate date] timeIntervalSince1970];
     
-    configuration.responseHandler = ^(AFHTTPRequestOperation *operation, id userInfo, MGJResponse *response, BOOL *shouldStopProcessing) {
+    configuration.responseHandler = ^(AFHTTPRequestOperation *operation, id userInfo, STResponse *response, BOOL *shouldStopProcessing) {
         [self appendLog:[NSString stringWithFormat:@"此次请求花费了:%f 秒", [[NSDate date] timeIntervalSince1970] - startTime]];
     };
     
-    [MGJRequestManager sharedInstance].configuration = configuration;
-    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/delay/2" parameters:nil startImmediately:YES configurationHandler:^(MGJRequestManagerConfiguration *configuration){
+    [STRequestManager sharedInstance].configuration = configuration;
+    [[STRequestManager sharedInstance] GET:@"http://httpbin.org/delay/2" parameters:nil startImmediately:YES configurationHandler:^(STRequestManagerConfiguration *configuration){
         // 这里还可以再加一些自定义的 userInfo
     } completionHandler:^(NSError *error, id<NSObject> result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
         [self appendLog:result.description];
@@ -521,7 +521,7 @@
                                  @"format": @"json",
                                  };
     
-    [[MGJRequestManager sharedInstance] POST:@"https://post.imageshack.us/upload_api.php" parameters:parameters startImmediately:YES constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    [[STRequestManager sharedInstance] POST:@"https://post.imageshack.us/upload_api.php" parameters:parameters startImmediately:YES constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:UIImageJPEGRepresentation(image, 0.75) name:@"fileupload" fileName:@"image.jpg" mimeType:@"image/jpeg"];
     } configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
         if (!error) {
@@ -535,10 +535,10 @@
 
 - (void)addHeaderValues
 {
-    MGJRequestManagerConfiguration *configuration = [MGJRequestManager sharedInstance].configuration;
-    configuration.builtinParameters = @{@"operationSys":@"ios",@"requestTool":@"MGJ"};
+    STRequestManagerConfiguration *configuration = [STRequestManager sharedInstance].configuration;
+    configuration.builtinParameters = @{@"operationSys":@"ios",@"requestTool":@"ST"};
     
-    [[MGJRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:nil startImmediately:YES configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
+    [[STRequestManager sharedInstance] GET:@"http://httpbin.org/get" parameters:nil startImmediately:YES configurationHandler:nil completionHandler:^(NSError *error, id result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
         if (!error) {
             [self appendLog:[result description]];
         } else {
