@@ -245,7 +245,7 @@
                                           parameters:@{@"foo": @"bar"}
                                           startImmediately:NO
                                           configurationHandler:^(STRequestManagerConfiguration *configuration) {
-                                              configuration.resultCacheDuration = 30;
+                                              configuration.resultCacheDuration = 10;
                                           }
                                           completionHandler:^(NSError *error, id<NSObject> result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
                                               [self appendLog:[NSString stringWithFormat:@"来自缓存:%@", isFromCache ? @"是" : @"否"]];
@@ -253,7 +253,7 @@
                                           }];
     
     AFHTTPRequestOperation *operation2 = [[STRequestManager sharedInstance]
-                                          GET:@"http://httpbin.org/get"
+                                          GET:@"http://m.springtour.com/home/AppLaunch/IosIndex"
                                           parameters:@{@"foo": @"bar"}
                                           startImmediately:NO
                                           configurationHandler:^(STRequestManagerConfiguration *configuration) {
@@ -485,8 +485,10 @@
                            startImmediately:YES
                        configurationHandler:^(STRequestManagerConfiguration *configuration){
                            configuration.userInfo = @{@"showLoading": @YES};
+                           configuration.resultCacheDuration = 30;
                        } completionHandler:^(NSError *error, id<NSObject> result, BOOL isFromCache, AFHTTPRequestOperation *operation) {
                            [self appendLog:result.description];
+                           [self appendLog:[NSString stringWithFormat:@"来自缓存:%@", isFromCache ? @"是" : @"否"]];
                        }];
 }
 
@@ -496,7 +498,7 @@
     NSTimeInterval startTime = [[NSDate date] timeIntervalSince1970];
     
     configuration.responseHandler = ^(AFHTTPRequestOperation *operation, id userInfo, STResponse *response, BOOL *shouldStopProcessing) {
-        [self appendLog:[NSString stringWithFormat:@"此次请求花费了:%f 秒", [[NSDate date] timeIntervalSince1970] - startTime]];
+        [self appendLog:[NSString stringWithFormat:@"此次请求花费了:%f秒", [[NSDate date] timeIntervalSince1970] - startTime]];
     };
     
     [STRequestManager sharedInstance].configuration = configuration;

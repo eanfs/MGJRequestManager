@@ -147,7 +147,7 @@ NSInteger const STResponseCancelError = -1;
             NSDictionary *dictionary = [fileURL resourceValuesForKeys:@[NSURLContentModificationDateKey] error:nil];
             NSDate *modificationDate = [dictionary objectForKey:NSURLContentModificationDateKey];
             if (modificationDate.timeIntervalSince1970 - date.timeIntervalSince1970 < 0) {
-                [_fileManager removeItemAtPath:fileURL.absoluteString error:nil];
+                [_fileManager removeItemAtPath:[fileURL path] error:nil];
             }
         }
     });
@@ -321,6 +321,8 @@ NSInteger const STResponseCancelError = -1;
     STRequestManagerConfiguration *configuration = [self.configuration copy];
     if (configurationHandler) {
         configurationHandler(configuration);
+        [self checkCleanCache:configuration];
+
     }
     self.requestManager.requestSerializer = configuration.requestSerializer;
     self.requestManager.responseSerializer = configuration.responseSerializer;
@@ -680,15 +682,19 @@ NSInteger const STResponseCancelError = -1;
     return _configuration;
 }
 
+- (void)checkCleanCache:(STRequestManagerConfiguration *) configuration
+{
+    if (configuration.resultCacheDuration > 0) {
+        double pastTimeInterval = [[NSDate date] timeIntervalSince1970] - configuration.resultCacheDuration;
+        NSDate *pastDate = [NSDate dateWithTimeIntervalSince1970:pastTimeInterval];
+        [self.cache trimToDate:pastDate];
+    }
+}
+
 - (void)setConfiguration:(STRequestManagerConfiguration *)configuration
 {
     if (_configuration != configuration) {
         _configuration = configuration;
-        if (_configuration.resultCacheDuration > 0) {
-            double pastTimeInterval = [[NSDate date] timeIntervalSince1970] - _configuration.resultCacheDuration;
-            NSDate *pastDate = [NSDate dateWithTimeIntervalSince1970:pastTimeInterval];
-            [self.cache trimToDate:pastDate];
-        }
     }
 }
 
